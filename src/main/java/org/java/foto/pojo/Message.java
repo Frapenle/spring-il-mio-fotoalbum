@@ -29,7 +29,6 @@ public class Message {
 		setEmail(email);
 		setMessage(message);
 		setCreatedAt(createdAt);
-		
 	}
 
 	public Integer getId() {
