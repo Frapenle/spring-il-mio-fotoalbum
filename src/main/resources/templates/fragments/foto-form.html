@@ -34,6 +34,25 @@
 			<label for="isVisible">Visibility</label>
     		<input type="checkbox" name="isVisible" th:field="*{visible}">
 		</div>
+		<div th:if="${isNewFoto}" class="mb-3 border p-2 rounded-2">
+			<div class="mb-2">Categories</div>
+			<div class="d-flex gap-4">
+				<div th:each="cat : ${categories}" th:object="${cat}" class="form-check">
+					<label class="form-check-label" for="categories">[[*{name}]]</label>
+		    		<input class="form-check-input" type="checkbox" th:id="${'category-' + cat.id}" th:value="*{id}" name="categories">
+				</div>
+			</div>
+		</div>
+		<div th:unless="${isNewFoto}" class="mb-3 border p-2 rounded-2">
+			<div class="mb-2">Categories</div>
+			<div class="d-flex gap-4">
+				<div th:each="cat : ${categories}" th:object="${cat}" class="form-check">
+					<label class="form-check-label" for="categories">[[*{name}]]</label>
+		    		<input class="form-check-input" type="checkbox" th:field="${foto.categories}" th:id="${'category-' + cat.id}" th:value="*{id}" name="categories">
+				</div>
+			</div>
+		</div>
+		
 		<div class="mb-3">
 			<input hidden type="date" class="form-control" id="createdAt" name="createdAt" th:value="*{createdAt}">
 		</div>

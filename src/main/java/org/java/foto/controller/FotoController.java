@@ -63,6 +63,7 @@ public class FotoController {
 	public String createFoto(Model model) {
 		List<Category> categories = categoryService.findAll();
 		model.addAttribute("foto", new Foto());
+		model.addAttribute("isNewFoto", true);
 		model.addAttribute("categories", categories);
 		return "foto/foto-create";
 	}
@@ -74,8 +75,10 @@ public class FotoController {
 		if(bindingResult.hasErrors()) {
 			for(ObjectError err : bindingResult.getAllErrors())
 				System.err.println("Error: " + err.getDefaultMessage());
+			List<Category> categories = categoryService.findAll();
 			model.addAttribute("foto", foto);
 			model.addAttribute("errors", bindingResult);
+			model.addAttribute("categories", categories);
 			return "foto/foto-create";
 		}
 		fotoService.save(foto);
@@ -87,6 +90,7 @@ public class FotoController {
 		Optional<Foto> optFoto = fotoService.findById(id);
 		List<Category> categories = categoryService.findAll();
 		Foto foto = optFoto.get();
+		model.addAttribute("isNewFoto", false);
 		model.addAttribute("categories", categories);
 		model.addAttribute("foto", foto);
 		return "foto/foto-update";
@@ -100,8 +104,10 @@ public class FotoController {
 		if(bindingResult.hasErrors()) {
 			for(ObjectError err : bindingResult.getAllErrors())
 				System.err.println("Errors: " + err.getDefaultMessage());
+			List<Category> categories = categoryService.findAll();
 			model.addAttribute("foto", foto);
 			model.addAttribute("errors", bindingResult);
+			model.addAttribute("categories", categories);
 			return "foto/foto-update";
 		}
 		fotoService.save(foto);

@@ -8,9 +8,36 @@
 </head>
 <body>
 	<header th:replace="~{fragments/header :: header}"></header>
-	<main>
-		<div th:each="cat : ${categories}">
-			<span>[[${cat.name}]]</span>
+	<main class="mt-1 container-fluid">
+		<div>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Name</th>
+						<th scope="col" class="text-center">Created</th>
+						<th scope="col"class="text-center w-50">
+							<div class="justify-content-end align-items-end d-flex"><a class="text-end btn btn-success btn-lg"
+									th:href="@{category/create}">Add category</a>
+							</div>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:if="${categories.size() > 0}" th:each="cat : ${categories}"
+						th:object="${cat}">
+						<th class="align-middle" scope="row">[[*{id}]]</th>
+						<td class="align-middle">[[*{name}]]</td>
+						<td class="align-middle text-center">[[*{FormattedCreatedAt}]]</td>
+						<td class="align-middle text-end">
+							 <a class="btn btn-danger" th:href="@{'/admin/category/delete/' + *{id}}">Delete</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div th:if="${categories.size() == 0}">
+				<p>Category is empty.</p>
+			</div>
 		</div>
 	</main>
 	<script th:src="@{/webjars/bootstrap/5.2.3/js/bootstrap.bundle.min.js}"></script>

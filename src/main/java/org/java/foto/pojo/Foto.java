@@ -40,6 +40,7 @@ public class Foto {
 	private String imageUrl;
 	
 	private boolean isVisible = true;
+	private boolean isNewFoto;
 	
     private LocalDateTime createdAt;
     
@@ -58,6 +59,12 @@ public class Foto {
 		setVisible(isVisible);
 	}
 
+	public boolean isNewFoto() {
+		return isNewFoto;
+	}
+	public void setNewFoto(boolean isNewFoto) {
+		this.isNewFoto = isNewFoto;
+	}
 	public Integer getId() {
 		return id;
 	}

@@ -1,6 +1,7 @@
 package org.java.foto.pojo;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -55,6 +56,10 @@ public class Category {
 	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = LocalDateTime.now();
 	}
+	public String getFormattedCreatedAt() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return createdAt.format(formatter);
+    }
 	
     public Set<Foto> getFotos() {
 		return fotos;
@@ -63,6 +68,7 @@ public class Category {
 	public void setFotos(Set<Foto> fotos) {
 		this.fotos = fotos;
 	}
+	
 	@Override
 	public boolean equals(Object object) {
 		if(!(object instanceof Category)) return false;
