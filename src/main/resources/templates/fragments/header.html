@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.3/css/bootstrap.min.css}" />
+<link th:rel="stylesheet" th:href="@{css/style.css}" />
+<title>Foto</title>
+</head>
+<body>
+	<header th:fragment="header">
+		<nav class="navbar navbar-expand-lg bg-light">
+		  <div class="container-fluid">
+		    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		      <span class="navbar-toggler-icon"></span>
+		    </button>
+		    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+		      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+		        <li class="nav-item">
+		          <a class="nav-link active" aria-current="page" href="/admin/foto">Home</a>
+		        </li>
+		        <li sec:authorize="hasAuthority('ADMIN')">
+		        </li>
+		      </ul>
+		      <form method="POST" class="d-flex" role="search" th:action="@{/admin/foto}">
+		        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" th:value="${title}" name="title">
+		        <button class="btn btn-outline-secondary" type="submit">Search</button>
+		      </form>
+		      	<a sec:authorize="isAnonymous()" href="/login" class="btn">Login</a>
+		      	<a sec:authorize="isAuthenticated()" class="btn border-0" href="/logout">Logout</a>
+		    </div>
+		  </div>
+		</nav>
+	</header>
+	<script th:src="@{/webjars/bootstrap/5.2.3/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

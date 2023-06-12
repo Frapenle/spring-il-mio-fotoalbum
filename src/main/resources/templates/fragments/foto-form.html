@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.3/css/bootstrap.min.css}"/>
+<link th:rel="stylesheet" th:href="@{/css/style.css}"/>
+<title>Foto form</title>
+</head>
+<body>
+	<div th:fragment="foto-form" class="w-100">
+		<div class="mb-3">
+			<label for="title" class="form-label">Title*</label>
+			<input type="text" class="form-control" id="title" name="title" th:value="*{title}">
+			<small class="text-danger" th:if="${errors != null && errors.hasFieldErrors('title')}">
+				[[ ${errors.getFieldError('title').defaultMessage} ]]
+			</small>
+		</div>
+		<div class="mb-3">
+			<label for="description" class="form-label">Description</label>
+			<textarea class="form-control" id="description" name="description"
+				th:text="*{description}" rows="5"></textarea>
+			<small class="text-danger" th:if="${errors != null && errors.hasFieldErrors('description')}">
+				[[ ${errors.getFieldError('description').defaultMessage} ]]
+			</small>
+		</div>
+		<div class="mb-3">
+			<label for="imageUrl" class="form-label">Url*</label>
+			<input type="text" class="form-control" id="imageUrl" name="imageUrl" th:value="*{imageUrl}">
+			<small class="text-danger" th:if="${errors != null && errors.hasFieldErrors('imageUrl')}">
+				[[ ${errors.getFieldError('imageUrl').defaultMessage} ]]
+			</small>
+		</div>
+		<div class="mb-3">
+			<label for="isVisible">Visibility</label>
+    		<input type="checkbox" name="isVisible" th:field="*{visible}">
+		</div>
+		<div class="mb-3">
+			<input hidden type="date" class="form-control" id="createdAt" name="createdAt" th:value="*{createdAt}">
+		</div>
+	</div>
+	<script th:src="@{/webjars/bootstrap/5.2.3/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

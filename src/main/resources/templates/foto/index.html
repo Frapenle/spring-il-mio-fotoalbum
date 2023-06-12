@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.3/css/bootstrap.min.css}"/>
+<link th:rel="stylesheet" th:href="@{/css/style.css}"/>
+<title>Foto</title>
+</head>
+<body>
+	<header th:replace="~{fragments/header :: header}"></header>
+	<main>
+		<table class="table table-striped">
+		  <thead>
+		    <tr>
+		      <th scope="col">#</th>
+		      <th scope="col">Preview</th>
+		      <th scope="col">Title</th>
+		      <th scope="col">Description</th>
+		      <th scope="col">Categories</th>
+		      <th scope="col">Visibility</th>  
+		      <th scope="col">Created</th>
+		      <th scope="col" class="text-center">
+			      <div class="justify-content-around align-items-end d-flex">
+			      	<span>Action</span>
+			      	<a class="text-end btn btn-success btn-lg" th:href="@{foto/create}">Add photo</a>
+			      </div>
+		      </th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <tr th:if="${fotos.size() > 0}" th:each="foto : ${fotos}" th:object="${foto}">
+		      <th class="align-middle" scope="row">[[*{id}]]</th>
+		      <td class="align-middle"><img th:alt="*{title}" th:src="*{imageUrl}" class="img-fluid" style="height: 50px;"></td>
+		      <td class="align-middle">[[*{title}]]</td>
+		      <td class="text-truncate align-middle" style="max-width: 400px">[[*{description}]]</td>
+		      <td class="align-middle">
+		      	<div>
+			      	<span th:if="${foto.categories.contains(cat)}" th:each="cat : ${categories}">[[${cat.name}]]&nbsp;</span>		      	
+		      	</div>
+		      </td>
+		      <td class="align-middle" th:text="*{isVisible} ? 'Yes' : 'No'"></td>
+		      <td class="align-middle">[[*{FormattedCreatedAt}]]</td>
+		      <td class="align-middle text-center">
+			  	<a class="btn btn-primary" th:href="@{'/admin/foto/show/' + ${foto.id}}">Show</a>
+			    <a class="btn btn-warning" th:href="@{'/admin/foto/edit/' + ${foto.id}}">Edit</a>
+			    <a class="btn btn-danger" th:href="@{'/admin/foto/delete/' + ${foto.id}}">Delete</a>
+		      </td>
+		    </tr>
+		  </tbody>
+		</table>
+		<div th:if="${fotos.size() == 0}">
+			<p>Non sono presenti foto.</p>
+		</div>
+	</main>
+	<script th:src="@{/webjars/bootstrap/5.2.3/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
