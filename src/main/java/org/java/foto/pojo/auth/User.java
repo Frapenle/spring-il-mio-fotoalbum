@@ -6,16 +6,19 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.java.foto.pojo.Foto;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class User implements UserDetails{
@@ -29,6 +32,9 @@ public class User implements UserDetails{
 	
 	@ManyToMany(fetch = FetchType.EAGER)
 	private Set<Role> roles;
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private Set<Foto> fotos;
 	
 	public User() {}
 

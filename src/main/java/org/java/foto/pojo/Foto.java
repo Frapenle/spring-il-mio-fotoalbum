@@ -7,8 +7,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.hibernate.validator.constraints.URL;
+import org.java.foto.pojo.auth.User;
 import org.springframework.lang.NonNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import jakarta.persistence.Column;
@@ -17,6 +19,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -46,6 +49,10 @@ public class Foto {
     
     @ManyToMany
     private Set<Category> categories;
+    
+    @ManyToOne
+    @JsonBackReference
+    private User user;
 	
 	
     public Foto () {}
@@ -59,6 +66,17 @@ public class Foto {
 		setVisible(isVisible);
 	}
 
+	public Foto(String title, String description, String imageUrl,
+			boolean isVisible, User user, Category...categories) {
+		setTitle(title);
+		setDescription(description);
+		setImageUrl(imageUrl);
+		setCreatedAt(createdAt);
+		setVisible(isVisible);
+		setUser(user);
+		setCategories(categories);
+	}
+	
 	public boolean isNewFoto() {
 		return isNewFoto;
 	}
@@ -123,6 +141,12 @@ public class Foto {
 	public void setCategories(Set<Category> categories) {
 		this.categories = categories;
 	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
 	@JsonSetter
 	public void setCategories(Category[] categories) {
 		setCategories(new HashSet<>(Arrays.asList(categories)));
@@ -150,7 +174,8 @@ public class Foto {
 			+ "\nDescription: " + getDescription()
 			+ "\nUrl: " + getImageUrl()
 			+ "\nCategories: " + getCategories()
-			+ "\nCreated: " + getCreatedAt();
+			+ "\nCreated: " + getCreatedAt()
+			+ "\nUsername: " + getUser();
 	}
 	
 }

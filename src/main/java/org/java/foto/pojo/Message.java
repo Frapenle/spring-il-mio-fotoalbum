@@ -66,7 +66,8 @@ public class Message {
 	public String toString() {
 		return "Id: " + getId()
 			+ "\nE-mail: " + getEmail()
-			+ "\nMessaggio: " + getMessage();
+			+ "\nMessaggio: " + getMessage()
+			+ "\nCreatedAt: " + getCreatedAt();
 	}
 	
 }

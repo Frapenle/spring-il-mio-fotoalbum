@@ -1,13 +1,20 @@
 package org.java.foto.controller;
 
+import java.nio.file.attribute.UserPrincipal;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
 import org.java.foto.pojo.Category;
 import org.java.foto.pojo.Foto;
+import org.java.foto.pojo.auth.User;
 import org.java.foto.service.CategoryService;
 import org.java.foto.service.FotoService;
+import org.java.foto.service.auth.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,10 +35,15 @@ public class FotoController {
 	private FotoService fotoService;
 	@Autowired
 	private CategoryService categoryService;
+	@Autowired
+	private UserService userService;
 	
 	@GetMapping
-	public String getHome(Model model) {
-		List<Foto> fotos = fotoService.findAll();
+	public String getHome(Model model, Authentication authentication) {
+		String user = authentication.getName();
+		
+//		List<Foto> fotos = fotoService.findAll();
+		List<Foto> fotos = fotoService.findByUser(user);
 		List<Category> categories = categoryService.findAll();
 		model.addAttribute("categories", categories);
 		model.addAttribute("fotos", fotos);
@@ -40,8 +52,12 @@ public class FotoController {
 	
 	@PostMapping
 	public String getFotoByTitle(Model model,
-			@RequestParam(required = false) String title) {
-		List<Foto> fotos = fotoService.findByTitleContaining(title);
+			@RequestParam(required = false) String title,
+			Authentication authentication) {
+		String user = authentication.getName();
+		
+//		List<Foto> fotos = fotoService.findByTitleContaining(title);
+		List<Foto> fotos = fotoService.findByTitleAndUser(title, user);
 		List<Category> categories = categoryService.findAll();
 		model.addAttribute("fotos", fotos);
 		model.addAttribute("categories", categories);
@@ -50,8 +66,12 @@ public class FotoController {
 	}
 	
 	@GetMapping("/show/{id}")
-	public String show(Model model, @PathVariable("id") Integer id) {
-		Optional<Foto> optFoto = fotoService.findById(id);
+	public String show(Model model, @PathVariable("id") Integer id,
+			Authentication authentication) {
+		String user = authentication.getName();
+		
+//		Optional<Foto> optFoto = fotoService.findById(id);
+		Optional<Foto> optFoto = fotoService.findByIdAndUser(id, user);
 		List<Category> categories = categoryService.findAll();
 		Foto foto = optFoto.get();
 		model.addAttribute("foto", foto);
@@ -70,8 +90,11 @@ public class FotoController {
 	
 	@PostMapping("/create")
 	public String storeFoto(Model model,
+			Authentication authentication,
 			@Valid @ModelAttribute Foto foto,
 			BindingResult bindingResult) {
+		User user = (User) authentication.getPrincipal();
+		
 		if(bindingResult.hasErrors()) {
 			for(ObjectError err : bindingResult.getAllErrors())
 				System.err.println("Error: " + err.getDefaultMessage());
@@ -81,13 +104,18 @@ public class FotoController {
 			model.addAttribute("categories", categories);
 			return "foto/foto-create";
 		}
+		foto.setUser(user);
 		fotoService.save(foto);
 		return "redirect:/admin/foto";
 	}
 	
 	@GetMapping("edit/{id}")
-	public String edit(@PathVariable("id") Integer id, Model model) {
-		Optional<Foto> optFoto = fotoService.findById(id);
+	public String edit(@PathVariable("id") Integer id, Model model,
+			Authentication authentication) {
+		String user = authentication.getName();
+		
+//		Optional<Foto> optFoto = fotoService.findById(id);
+		Optional<Foto> optFoto = fotoService.findByIdAndUser(id, user);
 		List<Category> categories = categoryService.findAll();
 		Foto foto = optFoto.get();
 		model.addAttribute("isNewFoto", false);
@@ -100,7 +128,9 @@ public class FotoController {
 	public String update(Model model,
 			@PathVariable Integer id,
 			@Valid @ModelAttribute Foto foto,
-			BindingResult bindingResult) {
+			BindingResult bindingResult,
+			Authentication authentication) {
+		User user = (User) authentication.getPrincipal();
 		if(bindingResult.hasErrors()) {
 			for(ObjectError err : bindingResult.getAllErrors())
 				System.err.println("Errors: " + err.getDefaultMessage());
@@ -110,13 +140,16 @@ public class FotoController {
 			model.addAttribute("categories", categories);
 			return "foto/foto-update";
 		}
+		foto.setUser(user);
 		fotoService.save(foto);
 		return "redirect:/admin/foto";
 	}
 	
 	@GetMapping("/delete/{id}")
-	public String delete(@PathVariable Integer id) {
-		Optional<Foto> optFoto = fotoService.findById(id);
+	public String delete(@PathVariable Integer id, Authentication authentication) {
+		String user = authentication.getName();
+//		Optional<Foto> optFoto = fotoService.findById(id);
+		Optional<Foto> optFoto = fotoService.findByIdAndUser(id, user);
 		Foto foto = optFoto.get();
 		fotoService.delete(foto);
 		return "redirect:/admin/foto";

@@ -32,4 +32,15 @@ public class FotoService {
 	public void delete(Foto foto) {
 		fotoRepository.delete(foto);
 	}
+	
+	public List<Foto> findByUser(String username){
+		return fotoRepository.findByUserUsername(username);
+	}
+	public List<Foto> findByTitleAndUser(String title, String username){
+		return fotoRepository.findByTitleContainingAndUserUsername(title, username);
+	}
+	public Optional<Foto> findByIdAndUser(Integer id, String username){
+		return fotoRepository.findByIdAndUserUsername(id, username);
+	}
+	
 }

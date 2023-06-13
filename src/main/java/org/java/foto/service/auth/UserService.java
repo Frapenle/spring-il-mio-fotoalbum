@@ -34,6 +34,5 @@ public class UserService implements UserDetailsService{
 		if (userOption.isEmpty()) throw new UsernameNotFoundException(username + "user does not exist.");
 		return userOption.get();
 	}
-	
-	
+
 }
